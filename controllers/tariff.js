@@ -79,6 +79,19 @@ exports.deleteTariff = asyncHandler(async (req, res, next) => {
 
 });
 
+exports.searchTariff = asyncHandler(async (req, res, next) => {
+  let { searchParam } = req.body;
 
+  if (!searchParam) {
+    return next(new ErrorResponse("Search param cannot be empty", 400));
+  }
+
+  var tariff = await Tariff.findOne({ name: /searchParam/i });
+  if (!tariff) {
+    return next(new ErrorResponse(`tariff not found`, 400));
+  }
+
+  res.status(200).json({ success: true, data: tariff });
+});
 
  

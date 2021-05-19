@@ -1,6 +1,6 @@
 const Payment = require('../models/Payment');
 const asyncHandler = require('../middlewares/async')
-const ErrorResponse = require('../middlewares/error');
+const ErrorResponse = require('../utilities/errorResponse');
 const Customer = require('../models/Customer');
 const Tariff = require('../models/Tariff');
 
@@ -47,8 +47,8 @@ exports.createPayment = asyncHandler(async (req, res, next) => {
     //     ));
     // }
 
-    req.body.customer = customer.Id;
-    req.body.tariff = tariff.Id;
+    req.body.customer = customer._Id;
+    req.body.tariff = tariff._Id;
     req.body.amount = tariff.price;
     
     const payment = await Payment.create(req.body);
@@ -64,7 +64,7 @@ exports.updatePayment = asyncHandler(async (req, res, next) => {
 
     if(!payment){
         return next(
-            new ErrorResponse(`No course with the id of ${req.params.id}`, 404)
+          new ErrorResponse(`No customer with the id of ${req.params.id}`, 404)
         );
     }
 
@@ -92,7 +92,7 @@ exports.deletePayment = asyncHandler(async (req, res, next) => {
 
     if(!payment){
         return next(
-            new ErrorResponse(`No course with the id of ${req.params.id}`, 404)
+          new ErrorResponse(`No customer with the id of ${req.params.id}`, 404)
         );
     }
 

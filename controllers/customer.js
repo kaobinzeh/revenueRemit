@@ -34,13 +34,6 @@ exports.addCustomer = asyncHandler(async (req, res, next) => {
 
     try {
 
-        // if(req.user.role !== 'admin'){
-        //      return next(
-        //         new ErrorResponse(
-        //             `The user with ID ${req.user.id} is not authorized to add customer`, 401
-        //     ));
-        // }
-
         const result = await Customer.create(customer);
 
         res.status(200).json({
@@ -62,12 +55,6 @@ exports.updateCustomer = asyncHandler( async(req, res, next) => {
         );
     }
 
-    if(req.user.role !== 'admin'){
-        return next(
-             new ErrorResponse(`User ${req.params.id} is not authorized to update customer`, 401)
-        )
-    }
-
     customer = await Customer.findOneAndUpdate(req.params.Id, req.body, {
         new: true,
     runValidators: true
@@ -87,4 +74,25 @@ exports.deleteCustomer = asyncHandler( async (req, res, next) => {
 
     res.status(200).json({success: true, data: {}});
    
+})
+
+exports.searchCustomer = asyncHandler(async (req, res, next) => {
+    let {searchParam} = req.body;
+
+    if(!searchParam){
+        return next(new ErrorResponse('Search param cannot be empty', 400));
+    }
+
+    var customer = await Customer.findOne({name: /searchParam/i});
+    if(!customer){
+        return next(
+            new ErrorResponse(
+            `Customer not found`,
+            400
+            )
+        );
+    }
+
+    res.status(200).json({success: true, data: customer});
+
 })
