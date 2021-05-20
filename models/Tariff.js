@@ -1,28 +1,31 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const TariffSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        trim: true,
-        require: [true, 'Please add a tariff name']
-    },
-    description: { type: String },
-    price: {
-        type: Number,
-        require: [true, 'Please enter price for tariff']
-    },
-    createdAt: {
+  name: {
+    type: String,
+    trim: true,
+    require: [true, "Please add a tariff name"],
+  },
+  description: { type: String },
+  price: {
+    type: Number,
+    require: [true, "Please enter price for tariff"],
+  },
+  createdAt: {
     type: Date,
-    default: Date.now
-  }
-
+    default: Date.now,
+  },
+  isActive: {
+    type: Boolean,
+    default: true,
+  },
 });
 
-TariffSchema.virtual('payments', {
-    ref: 'Payment',
-    localField: '_id',
-    foreignField: 'tariff',
-    justOne: false
+TariffSchema.virtual("payments", {
+  ref: "Payment",
+  localField: "_id",
+  foreignField: "tariff",
+  justOne: false,
 });
 
-module.exports = mongoose.model('Tariff', TariffSchema);
+module.exports = mongoose.model("Tariff", TariffSchema);

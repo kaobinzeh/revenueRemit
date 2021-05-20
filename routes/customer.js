@@ -18,7 +18,7 @@ router.use("/:customerId/payments", paymentRouter);
 
 router
     .route('/')
-    .get(advanceResults(Customer, {select: 'name phone email', isActive: true }, getCustomers))
+    .get(advanceResults(Customer), getCustomers)
     .post(protect, authorize('admin', 'revenue officer'),  addCustomer);
     
 

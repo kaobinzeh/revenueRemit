@@ -6,7 +6,7 @@ const ErrorResponse = require('../utilities/errorResponse');
 exports.getCustomers = asyncHandler( async(req, res, next) => {
     const constion = {"isActive":true};
 
-    res.status(200).json(res.advanceResults)
+    res.status(200).json(res.advancedResults);
 });
 
 
@@ -46,30 +46,32 @@ exports.addCustomer = asyncHandler(async (req, res, next) => {
 
 //update a customer
 exports.updateCustomer = asyncHandler( async(req, res, next) => {
-    let customer = await Customer.findById(req.params.Id);
+    let customer = await Customer.findById(req.params.id);
 
     if(!customer){
         return next(
-            new ErrorResponse(`Customer with id of ${req.params.Id} not found`, 400)
+            new ErrorResponse(`Customer with id of ${req.params.id} not found`, 400)
         );
     }
 
-    customer = await Customer.findOneAndUpdate(req.params.Id, req.body, {
+    customer = await Customer.findOneAndUpdate(req.params.id, req.body, {
         new: true,
     runValidators: true
     })
+
+    res.status(200).json({ success: true, data: customer });
 })
 
 //delete a customer
 exports.deleteCustomer = asyncHandler( async (req, res, next) => {
-    var customer = await Customer.findById(req.params.Id);
+    var customer = await Customer.findById(req.params.id);
 
     if(!customer){
-        return next(new ErrorResponse(`Customer with id of ${req.params.Id} not found`, 400));
+        return next(new ErrorResponse(`Customer with id of ${req.params.id} not found`, 400));
     }
 
     customer.isActive = false;
-    var result = await Customer.findOneAndUpdate(req.params.Id, {"isActive": false}, {new: true, runValidators: true});
+    var result = await Customer.findOneAndUpdate(req.params.id, {"isActive": false}, {new: true, runValidators: true});
 
     res.status(200).json({success: true, data: {}});
    

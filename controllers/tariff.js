@@ -3,7 +3,8 @@ const ErrorResponse = require("../utilities/errorResponse");
 const asyncHandler = require('../middlewares/async');
 
 exports.getTariffs = asyncHandler( async(req, res, next) => {
-    res.status(200).json(res.advanceResults);
+    res.status(200).json(res.advancedResults);
+
 });
 
 exports.getTariff = asyncHandler(async (req, res, next) => {
