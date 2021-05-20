@@ -3,7 +3,7 @@ const {getPayment, getPayments, createPayment, updatePayment, deletePayment} = r
 const advancedResults = require('../middlewares/advanceResults');
 const Payment = require('../models/Payment');
 
-const router = express.Router({mergeParams: true});
+const router = express.Router({ mergeParams: true });
 
 const {protect, authorize} = require('../middlewares/auth')
 

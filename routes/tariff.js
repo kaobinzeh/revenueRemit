@@ -9,24 +9,24 @@ const {
 } = require("../controllers/tariff");
 const advancedResults = require('../middlewares/advanceResults');
 const Tariff = require('../models/Tariff');
-
-const paymentRouter = require('./payment');
 const {protect, authorize} = require('../middlewares/auth');
+const paymentRouter = require('./payment');
+
 const router = express.Router();
 
-router.use('/:tariffId/payments', paymentRouter);
+router.use("/:tariffId/payments", paymentRouter);
 
 router
   .route("/")
-  .get(advancedResults(Tariff, "payment"), getTariffs)
+  .get(advancedResults(Tariff), getTariffs)
   .post(protect, authorize("admin", "revenue officer"), createTariff);
+  
+  router.route("/search").get(searchTariff);
 
 router
   .route("/:id")
   .get(getTariff)
   .put(protect, authorize("admin", "revenue officer"), updateTariff)
   .delete(protect, authorize("admin", "revenue officer"), deleteTariff);
-
-router.route("/search").post(searchTariff);
 
 module.exports = router;

@@ -1,6 +1,5 @@
 const Customer = require('../models/Customer');
 const asyncHandler = require('../middlewares/async');
-var mongoose = require('mongoose');
 const ErrorResponse = require('../utilities/errorResponse');
 
 //Get all customer 
@@ -14,7 +13,7 @@ exports.getCustomers = asyncHandler( async(req, res, next) => {
 //get customer by Id
 exports.getCustomer = asyncHandler(async (req, res, next) => {
     
-    var customer = await Customer.findById(req.params.Id);
+    var customer = await Customer.findById(req.params.id);
 
     if(!customer){
         return next(
@@ -77,13 +76,16 @@ exports.deleteCustomer = asyncHandler( async (req, res, next) => {
 })
 
 exports.searchCustomer = asyncHandler(async (req, res, next) => {
-    let {searchParam} = req.body;
-
+    const searchParam = req.query.searchParam;
+    
     if(!searchParam){
         return next(new ErrorResponse('Search param cannot be empty', 400));
     }
+    
+    var customer = await Customer.findOne({
+      name: { $regex: searchParam, $options: "i" },
+    }).select("_id name phone email");
 
-    var customer = await Customer.findOne({name: /searchParam/i});
     if(!customer){
         return next(
             new ErrorResponse(

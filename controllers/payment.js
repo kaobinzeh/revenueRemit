@@ -3,18 +3,50 @@ const asyncHandler = require('../middlewares/async')
 const ErrorResponse = require('../utilities/errorResponse');
 const Customer = require('../models/Customer');
 const Tariff = require('../models/Tariff');
+const { request } = require('express');
 
 
 exports.getPayments = asyncHandler(async (req, res, next) => {
+
+    if(req.baseUrl.split('/')[3] === 'customer'){
+        const payment = await Payment.find({
+          customer: req.params.customerId,
+        }).populate({
+          path: "tariff",
+          select: "name description price",
+        });;
+
+        res.status(200).json({
+            success: true,
+            count: payment.length,
+            data: payment
+        })
+    }
+
+    if (req.baseUrl.split("/")[3] === "tariff") {
+        const payment = await Payment.find({
+        tariff: req.params.tariffId,
+        }).populate({
+            path: "customer",
+            select: "name phone email"
+        });
+
+        res.status(200).json({
+        success: true,
+        count: payment.length,
+        data: payment,
+        });
+    }
+
     res.status(200).json(res.advancedResults);
 })
 
 exports.getPayment = asyncHandler(async (req, res, next) => {
-    const payment = await Payment.findById(req.params.Id);
+    const payment = await Payment.findById(req.params.id);
 
     if(!payment){
         return next(
-            new ErrorResponse(`Payment with id ${req.params.Id} not found`, 400)
+            new ErrorResponse(`Payment with id ${req.params.id} not found`, 400)
         );
     }
 
@@ -23,32 +55,33 @@ exports.getPayment = asyncHandler(async (req, res, next) => {
 
 exports.createPayment = asyncHandler(async (req, res, next) => {
 
+    if(!req.body.customerId){
+        return next( new ErrorResponse('No customer Id provided',400));
+    }
+
     const customer = await Customer.findById(req.body.customerId);
     
     if(!customer){
         return next(
             new ErrorResponse(`No customer with the id of ${req.body.customerId}`), 404
         );
+    }   
+
+    if (!req.body.tariffId) {
+       return next(new ErrorResponse("No Tariff Id provided", 400));
     }
 
     const tariff = await Tariff.findById(req.body.tariffId);
 
     if(!tariff){
         return next(
-            new ErrorResponse(`No Tariff with the id of ${req.body.tariffId}`), 404
+          new ErrorResponse(`No Tariff with the id of ${req.body.tariffId}`),
+          404
         );
     }
 
-    // if (req.user.role !== 'admin') {
-    //     return next(
-    //     new ErrorResponse(
-    //         `User ${req.user.id} is not authorized to add payment ${bootcamp._id}`,
-    //         401
-    //     ));
-    // }
-
-    req.body.customer = customer._Id;
-    req.body.tariff = tariff._Id;
+    req.body.customer = customer._id;
+    req.body.tariff = tariff._id;
     req.body.amount = tariff.price;
     
     const payment = await Payment.create(req.body);
