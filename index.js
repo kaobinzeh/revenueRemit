@@ -42,6 +42,8 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
+app.use(express.static(path.join(__dirname, "public")));
+
 app.use("/api/v1/customer", customer);
 app.use("/api/v1/tariff", tariff);
 app.use("/api/v1/payment", payment);
