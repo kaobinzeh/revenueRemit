@@ -68,6 +68,7 @@ exports.createPayment = asyncHandler(async (req, res, next) => {
     }   
 
     if (!req.body.tariffId) {
+        
        return next(new ErrorResponse("No Tariff Id provided", 400));
     }
 
