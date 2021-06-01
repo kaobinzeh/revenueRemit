@@ -19,6 +19,7 @@ const customer = require("./routes/customer");
 const tariff = require("./routes/tariff");
 const payment = require("./routes/payment");
 const auth = require("./routes/auth");
+const user = require('./routes/user');
 
 const app = express();
 
@@ -48,6 +49,7 @@ app.use("/api/v1/customer", customer);
 app.use("/api/v1/tariff", tariff);
 app.use("/api/v1/payment", payment);
 app.use("/api/v1/auth", auth);
+app.use("/api/v1/user", user);
 
 const PORT = process.env.PORT || 7000;
 const server = app.listen(

@@ -54,7 +54,7 @@ exports.updateCustomer = asyncHandler( async(req, res, next) => {
         );
     }
 
-    customer = await Customer.findOneAndUpdate(req.params.id, req.body, {
+    customer = await Customer.findOneAndUpdate({ _id : req.params.id}, req.body, {
         new: true,
     runValidators: true
     })
@@ -98,5 +98,9 @@ exports.searchCustomer = asyncHandler(async (req, res, next) => {
     }
 
     res.status(200).json({success: true, data: customer});
+})
+
+exports.uploadRecords = asyncHandler(async (req, res, next) => {
+    
 
 })

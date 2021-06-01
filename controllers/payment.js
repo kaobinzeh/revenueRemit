@@ -101,18 +101,22 @@ exports.updatePayment = asyncHandler(async (req, res, next) => {
         );
     }
 
-     // if (req.user.role !== 'admin') {
-    //     return next(
-    //     new ErrorResponse(
-    //         `User ${req.user.id} is not authorized to update payment`,
-    //         401
-    //     ));
-    // }
+     if (req.user.role !== 'admin') {
+        return next(
+        new ErrorResponse(
+            `User ${req.user.id} is not authorized to update payment`,
+            401
+        ));
+    }
 
-    payment = await Payment.findByIdAndUpdate(req.params.id, req.    body, {
+    payment = await Payment.findByIdAndUpdate(
+      { _id: req.params.id },
+      req.body,
+      {
         new: true,
-        runValidators: true
-    });
+        runValidators: true,
+      }
+    );
 
     res.status(200).json({
         success: true,
@@ -129,13 +133,13 @@ exports.deletePayment = asyncHandler(async (req, res, next) => {
         );
     }
 
-    // if (req.user.role !== 'admin') {
-    //     return next(
-    //     new ErrorResponse(
-    //         `User ${req.user.id} is not authorized to delete payment`,
-    //         401
-    //     ));
-    // }
+    if (req.user.role !== 'admin') {
+        return next(
+        new ErrorResponse(
+            `User ${req.user.id} is not authorized to delete payment`,
+            401
+        ));
+    }
 
     payment.remove();
 

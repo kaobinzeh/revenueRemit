@@ -58,7 +58,7 @@ exports.updateTariff = asyncHandler(async (req, res, next) => {
     );
   }
 
-  tariff = await Tariff.findOneAndUpdate(req.params.id, req.body, {
+  tariff = await Tariff.findOneAndUpdate({ _id: req.params.id}, req.body, {
     new: true,
     runValidators: true,
   });
