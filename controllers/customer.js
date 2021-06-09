@@ -84,7 +84,7 @@ exports.searchCustomer = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse('Search param cannot be empty', 400));
     }
     
-    var customer = await Customer.findOne({
+    var customer = await Customer.find({
       name: { $regex: searchParam, $options: "i" },
     }).select("_id name phone email");
 
@@ -92,7 +92,7 @@ exports.searchCustomer = asyncHandler(async (req, res, next) => {
         return next(
             new ErrorResponse(
             `Customer not found`,
-            400
+            404
             )
         );
     }

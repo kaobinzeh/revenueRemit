@@ -96,11 +96,11 @@ exports.searchTariff = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse("Search param cannot be empty", 400));
   }
 
-  var tariff = await Tariff.findOne({
+  var tariff = await Tariff.find({
     name: { $regex: searchParam, $options: "i" },
   }).select("_id name price");
   if (!tariff) {
-    return next(new ErrorResponse(`tariff not found`, 400));
+    return next(new ErrorResponse(`tariff not found`, 404));
   }
 
   res.status(200).json({ success: true, data: tariff });
