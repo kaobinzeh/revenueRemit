@@ -18,4 +18,8 @@ router
   .put(protect, authorize("admin", "revenue officer"), updatePayment)
   .delete(protect, authorize("admin", "revenue officer"), deletePayment);
 
+router
+  .route("/year/:id")
+  .get(advancedResults(Payment, { path: "customer tariff" }), getPayments);
+  
 module.exports = router;
