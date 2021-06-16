@@ -11,8 +11,8 @@ exports.getPayments = asyncHandler(async (req, res, next) => {
     const payment = await Payment.find({
       customer: req.params.customerId,
     }).populate({
-      path: "tariff",
-      select: "name description price",
+      path: "tariff customer",
+      select: "name description price email phone",
     });
 
     res.status(200).json({
@@ -25,8 +25,8 @@ exports.getPayments = asyncHandler(async (req, res, next) => {
     const payment = await Payment.find({
       tariff: req.params.tariffId,
     }).populate({
-      path: "customer",
-      select: "name phone email",
+      path: "customer tariff",
+      select: "name phone email price",
     });
 
     res.status(200).json({
